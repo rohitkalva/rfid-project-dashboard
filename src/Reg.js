@@ -105,13 +105,22 @@ import axios from 'axios';
       .catch(function (error) {
         console.log(error);
       });
+this.changerandon(event);
+    
     }
+
+    changerandon(e){
+      e.target.reset();
+    }
+
+  
   
     render() {
         const { invalid, displayErrors } = this.state;
       return (
           <div>
           <form
+          id="myForm"
             onSubmit={this.handleSubmit}
             noValidate
             className={displayErrors ? 'displayErrors' : ''}
