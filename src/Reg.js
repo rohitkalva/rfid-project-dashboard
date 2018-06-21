@@ -1,5 +1,6 @@
-import React, {Component} from 'react'
-import './reg.css'
+import React, {Component} from 'react';
+import './reg.css';
+import axios from 'axios';
 
   class ShakingError extends React.Component {
       constructor() { super(); this.state = { key: 0 }; }
@@ -87,11 +88,23 @@ import './reg.css'
       var dbdata = JSON.stringify({
     "tagID": jsondata.tagID, "product": jsondata.product, "purchasedate": jsondata.purchasedate, "invoicenumber": jsondata.invoicenumber, "nextinspdate": dateString      
     })
-    //console.log(dbdata)    
-      // fetch('/api/form-submit-url', {
+    console.log(dbdata)    
+      // fetch('http://138.68.108.140:1080/registration', {
       //   method: 'POST',
       //   body: data,
       // });
+    
+      axios({
+        method: 'post',
+        url: 'http://138.68.108.140:1080/registration',
+        data: JSON.parse(dbdata)
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   
     render() {
