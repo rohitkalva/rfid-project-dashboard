@@ -19,8 +19,12 @@ import axios from 'axios';
   class Registration extends Component {
     constructor() {
       super();
-      this.state = {};
+      this.state = {
+        res : ""
+    };
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.changerandom = this.changerandom.bind(this);
+      this.timeoutfunction = this.timeoutfunction.bind(this);
     }
   
     handleSubmit(event) {
@@ -55,7 +59,7 @@ import axios from 'axios';
       for (let name of data.keys()) {
         const input = form.elements[name];
         const parserName = input.dataset.parse;
-        console.log('parser name is', parserName);
+        //console.log('parser name is', parserName);
         if (parserName) {
           const parsedValue = inputParsers[parserName](data.get(name))
           data.set(name, parsedValue);
@@ -93,32 +97,51 @@ import axios from 'axios';
       //   method: 'POST',
       //   body: data,
       // });
-    
+      var self = this;
       axios({
         method: 'post',
         url: 'http://138.68.108.140:1080/registration',
         data: JSON.parse(dbdata)
       })
       .then(function (response) {
-        console.log(response);
+        console.log(response.data.message);
+        self.setState({
+          res: "Entry to DataBase Successful!",
+          invalid: false,
+          displayErrors: false,
+        });
       })
       .catch(function (error) {
         console.log(error);
+        self.setState({
+          res: "Error occured. Check your entry. There might be a record with the same Tag ID.",
+          invalid: false,
+          displayErrors: false,
+        });
       });
-this.changerandon(event);
-    
+      setTimeout(this.timeoutfunction, 7000);
+      this.changerandom(event);    
     }
 
-    changerandon(e){
+    changerandom(e){
       e.target.reset();
+    }
+
+    timeoutfunction(){
+      this.setState({
+        res: "",
+        invalid: false,
+        displayErrors: false,
+      });
     }
 
   
   
     render() {
-        const { invalid, displayErrors } = this.state;
+        const { res, invalid, displayErrors } = this.state;
       return (
           <div>
+            <h2>Inventory and Maintenance portal for Medical Equipment</h2>
           <form
           id="myForm"
             onSubmit={this.handleSubmit}
@@ -169,6 +192,11 @@ this.changerandon(event);
           <div className="res-block">
             {invalid && (
               <ShakingError text="Form is not valid" />
+            )}
+            {!invalid && res && (
+              <div>
+                <pre> {res} </pre>
+              </div>
             )}
            
           </div>

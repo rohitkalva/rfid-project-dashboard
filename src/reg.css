@@ -58,6 +58,15 @@ body {
   h3 {
     margin-top: 0;
   }
+
+  h2 {
+    margin-top: 0;
+  }
+
+  pre {
+    font-family: 'Roboto Slab', sans-serif;
+    color: #484848;
+  }
   
   @keyframes bounce {
     from, 20%, 53%, 80%, to {
