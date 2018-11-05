@@ -4,7 +4,8 @@ import "./css/bootstrap.min.css"
 
 const Home = () => (
   <div>
-   <img id="image" src="https://i2.wp.com/www.adeveloperdiary.com/wp-content/uploads/2016/03/How-to-integrate-React-D3-The-right-way-adeveloperdiary.com-4.jpg" alt="d3+reaact" />
+  
+  <img id ="image" src="https://i.imgur.com/IVdQfBI.png" alt="logo"/>
   </div>
 )
 
