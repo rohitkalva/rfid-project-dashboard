@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import Registration from './Reg';
+import { BrowserRouter } from 'react-router-dom';
+import Components from './components';
+
 
 class App extends Component {
   render() {
     return (
-      <Registration/>
-    );
+      <BrowserRouter>
+      <Components />
+      </BrowserRouter>    );
   }
 }
 

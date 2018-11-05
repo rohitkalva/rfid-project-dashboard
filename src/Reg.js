@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './reg.css';
+import './css/reg.css';
 import axios from 'axios';
 
   class ShakingError extends React.Component {
@@ -100,7 +100,7 @@ import axios from 'axios';
       var self = this;
       axios({
         method: 'post',
-        url: 'http://138.68.108.140:1080/registration',
+        url: 'http://46.101.232.21:1080/registration',
         data: JSON.parse(dbdata)
       })
       .then(function (response) {
@@ -141,7 +141,6 @@ import axios from 'axios';
         const { res, invalid, displayErrors } = this.state;
       return (
           <div>
-            <h2>Inventory and Maintenance portal for Medical Equipment</h2>
           <form
           id="myForm"
             onSubmit={this.handleSubmit}
