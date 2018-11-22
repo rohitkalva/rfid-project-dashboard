@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import './css/reg.css';
 import axios from 'axios';
+import ModernDatepicker from 'react-modern-datepicker';
+
 
   class ShakingError extends React.Component {
       constructor() { super(); this.state = { key: 0 }; }
@@ -20,12 +22,14 @@ import axios from 'axios';
     constructor() {
       super();
       this.state = {
-        res : ""
+        res : "",
     };
       this.handleSubmit = this.handleSubmit.bind(this);
       this.changerandom = this.changerandom.bind(this);
       this.timeoutfunction = this.timeoutfunction.bind(this);
     }
+
+    
   
     handleSubmit(event) {
       event.preventDefault();
@@ -78,19 +82,19 @@ import axios from 'axios';
       //console.log(jsondata)
 
       var dateString = jsondata.purchasedate;
-      var inspdate = new Date(dateString);
+      var nextinspdate = new Date(dateString);
 
       //add 3 Years to the date
-     inspdate.setFullYear(inspdate.getFullYear() +3);
+     nextinspdate.setFullYear(nextinspdate.getFullYear() +3);
 
-      var y = inspdate.getFullYear(),
-      m = inspdate.getMonth() + 1, // january is month 0 in javascript
-      d = inspdate.getDate();
+      var y = nextinspdate.getFullYear(),
+      m = nextinspdate.getMonth() + 1, // january is month 0 in javascript
+      d = nextinspdate.getDate();
       var pad = function(val) { var str = val.toString(); return (str.length < 2) ? "0" + str : str};
       dateString = [y, pad(m), pad(d)].join("-");
 
       var dbdata = JSON.stringify({
-    "tagID": jsondata.tagID, "product": jsondata.product, "purchasedate": jsondata.purchasedate, "invoicenumber": jsondata.invoicenumber, "nextinspdate": dateString      
+    "tagid": jsondata.tagid, "equipment": jsondata.equipment, "orderdate": jsondata.orderdate, "equipment_type": jsondata.equipment_type, "labelling": jsondata.labelling, "nextinspdate":jsondata.nextinspdate, "username": jsondata.username      
     })
     console.log(dbdata)    
       // fetch('http://138.68.108.140:1080/registration', {
@@ -100,7 +104,8 @@ import axios from 'axios';
       var self = this;
       axios({
         method: 'post',
-        url: 'http://46.101.232.21:1080/registration',
+        url: 'http://46.101.232.21:1080/api/registration',
+        //url: 'http://localhost:1080/registration',
         data: JSON.parse(dbdata)
       })
       .then(function (response) {
@@ -146,40 +151,75 @@ import axios from 'axios';
             onSubmit={this.handleSubmit}
             noValidate
             className={displayErrors ? 'displayErrors' : ''}
-           >
-            <label htmlFor="tagID">Tag ID:</label>
+           >          
+            <label htmlFor="tagid">Tag ID:</label>
             <input
-              id="tagID"
-              name="tagID"
+              id="tagid"
+              name="tagid"
               type="text"
+              autoComplete="off"
               required
             />
 
-            <label htmlFor="product">Product:</label>
+            <label htmlFor="equipment">Equipment:</label>
             <input
-              id="product"
-              name="product"
+              id="equipment"
+              name="equipment"
               type="text"
+              autoComplete="off"
               //data-parse="uppercase"
               required
             />
   
-            <label htmlFor="purchasedate">Purchase Date:</label>
+            <label htmlFor="equipment_type">Equipment Type:</label>
             <input
-              id="purchasedate"
-              name="purchasedate"
+              id="equipment_type"
+              name="equipment_type"
+              type="text"
+              autoComplete="off"
+              //data-parse="uppercase"
+              required
+            />
+
+            <label htmlFor="orderdate">Order Date:</label>
+            <input
+              id="orderdate"
+              name="orderdate"
               type="text"
               data-parse="date"
               placeholder="MM/DD//YYYY"
               pattern="\d{2}\/\d{2}/\d{4}"
+              autoComplete="off"
               required
             />
 
-            <label htmlFor="invoicenumber">Invoice Number:</label>
+            <label htmlFor="labelling">Label ID:</label>
             <input
-              id="invoicenumber"
-              name="invoicenumber"
+              id="labelling"
+              name="labelling"
               type="text"
+              autoComplete="off"
+              required
+            />
+
+            <label htmlFor="nextinspdate">Upcoming Inspection Date:</label>
+            <input
+              id="nextinspdate"
+              name="nextinspdate"
+              type="text"
+              data-parse="date"
+              placeholder="MM/DD//YYYY"
+              pattern="\d{2}\/\d{2}/\d{4}"
+              autoComplete="off"
+              required
+            />
+
+            <label htmlFor="username">Employee Name:</label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              autoComplete="off"
               required
             />
   
