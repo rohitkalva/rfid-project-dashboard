@@ -17,6 +17,7 @@ class Header extends Component{
       <ul className="nav navbar-nav">
       <li><Link to='/'>Home</Link></li>
       <li><Link to='/Reg'>New Product Registration</Link></li>
+      <li><Link to='/getreport'>Download Report</Link></li>
       <li><Link to='/UpdateOldData'>Upload Excel</Link></li>
       
             
