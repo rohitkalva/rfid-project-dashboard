@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './css/reg.css';
 import axios from 'axios';
-import ModernDatepicker from 'react-modern-datepicker';
 
 
   class ShakingError extends React.Component {
