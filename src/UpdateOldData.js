@@ -42,8 +42,8 @@ class UpdateOldData extends Component {
   }
 
   dataparse(data) {
-    var david = this.arrayToRows(data.export)
-    console.log(david)
+    var json = this.arrayToRows(data.export)
+    console.log(json)
   }
 
   //Function to convert 2D array to standard JSON object and return to dataparse
