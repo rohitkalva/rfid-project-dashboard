@@ -8,8 +8,8 @@ class getreport extends Component {
     super(props);
     this.state = {
       res: "",
-      startDate: new Date(),
-      toDate: new Date(),
+      startDate:"",
+      toDate: "",
       report: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,14 +37,13 @@ class getreport extends Component {
     event.preventDefault();
 
     //Axios post call to send and retreive data from API
-    axios
-      .post("http://46.101.232.21:1080/api/getreport", {
-        fromdate: this.state.startDate,
-        todate: this.state.toDate
+    axios.post("http://localhost:1080/api/getreport", {
+        fromdate: this.state.startDate + " 00:00:00",
+        todate: this.state.toDate + " 23:59:59"
       })
       .then(response => {
         this.setState({
-          report: response.data.data
+          report: response.data.report
         });
         console.log(this.state.report);
         this.downloadcsv(this.state.report);
@@ -114,7 +113,7 @@ class getreport extends Component {
     const { startDate, toDate } = this.state;
     return (
       <div>
-        <form id="myForm" onSubmit={this.handleSubmit}>
+        <form id="myForm" onSubmit={this.handleSubmit} autoComplete="off"> 
           <label htmlFor="fromdate">From Date:</label>
           <ModernDatepicker
             id="orderdate"
@@ -125,7 +124,7 @@ class getreport extends Component {
             showBorder
             onChange={date => this.handleChange(date)}
             placeholder={"Select From Date"}
-            autoComplete="off"
+            
           />
 
           <label htmlFor="todate">To Date:</label>
@@ -138,7 +137,6 @@ class getreport extends Component {
             showBorder
             onChange={date => this.handleChange1(date)}
             placeholder={"Select To Date"}
-            autoComplete="off"
           />
 
           <button>Download Report</button>
