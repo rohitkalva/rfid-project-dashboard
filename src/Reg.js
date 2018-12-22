@@ -201,8 +201,8 @@ class Registration extends Component {
     var self = this;
     axios({
       method: "post",
-      url: "http://46.101.232.21:1080/api/registration",
-      //url: 'http://localhost:1080/registration',
+      // url: "http://141.44.18.16:1080/api/registration",
+      url: 'http://localhost:1080/api/registration',
       data: JSON.parse(dbdata)
     })
       .then(function(response) {
@@ -243,7 +243,7 @@ class Registration extends Component {
       tagvalue: value
     })
 
-    if(value.length===10){
+    if(value.length===24){
       this.setState({
         fieldvalidation: false
       })
@@ -294,7 +294,7 @@ class Registration extends Component {
             maxLength="2"
             onChange={(e) =>{this.tagidvalidation(e.target.value) }}
             autoComplete="off"
-            inputProps={{maxLength: 10}}
+            inputProps={{maxLength: 24}}
             InputLabelProps={{
               classes: {
                 root: classes.cssLabel,
