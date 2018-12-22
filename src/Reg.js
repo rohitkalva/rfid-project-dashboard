@@ -89,20 +89,13 @@ class Registration extends Component {
     super();
     this.state = {
       res: "",
-      date: new Date(),
+      tagvalue: "",
+      fieldvalidation: true
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.changerandom = this.changerandom.bind(this);
     this.timeoutfunction = this.timeoutfunction.bind(this);
-    this.clear = this.clear.bind(this);
-  }
-
-  componentWillMount() {
-    const { date } = this.state;
-    var date1 = this.convert(date);
-    this.setState({
-      date: date1
-    });
+    this.tagidvalidation = this.tagidvalidation.bind(this);
   }
 
   convert(str) {
@@ -114,6 +107,24 @@ class Registration extends Component {
 
   handleSubmit(event) {
     console.log("clicked");
+
+    //Calculation of next inspection date. +36 Months
+    var nextinspdate = new Date();
+
+    // //add 3 Years to the date
+    nextinspdate.setFullYear(nextinspdate.getFullYear() + 3);
+
+    var y = nextinspdate.getFullYear(),
+      m = nextinspdate.getMonth() + 1, // january is month 0 in javascript
+      d = nextinspdate.getDate();
+    var pad = function(val) {
+      var str = val.toString();
+      return str.length < 2 ? "0" + str : str;
+    };
+    nextinspdate = [y, pad(m), pad(d)].join("-");
+    console.log(nextinspdate)
+
+
     event.preventDefault();
     if (!event.target.checkValidity()) {
       this.setState({
@@ -125,21 +136,21 @@ class Registration extends Component {
     const form = event.target;
     const data = new FormData(form);
 
-    const inputParsers = {
-      date(input) {
-        const split = input.split("/");
-        const day = split[1];
-        const month = split[0];
-        const year = split[2];
-        return `${year}-${month}-${day}`;
-      },
-      uppercase(input) {
-        return input.toUpperCase();
-      },
-      number(input) {
-        return parseFloat(input);
-      }
-    };
+    // const inputParsers = {
+    //   date(input) {
+    //     const split = input.split("/");
+    //     const day = split[1];
+    //     const month = split[0];
+    //     const year = split[2];
+    //     return `${year}-${month}-${day}`;
+    //   },
+    //   uppercase(input) {
+    //     return input.toUpperCase();
+    //   },
+    //   number(input) {
+    //     return parseFloat(input);
+    //   }
+    // };
 
     // for (let name of data.keys()) {
     //   const input = form.elements[name];
@@ -161,21 +172,6 @@ class Registration extends Component {
     }
     var jsondata = JSON.parse(stringifyFormData(data));
     console.log(jsondata);
-
-    var dateString = jsondata.purchasedate;
-    var nextinspdate = new Date(dateString);
-
-    // //add 3 Years to the date
-    nextinspdate.setFullYear(nextinspdate.getFullYear() + 3);
-
-    var y = nextinspdate.getFullYear(),
-      m = nextinspdate.getMonth() + 1, // january is month 0 in javascript
-      d = nextinspdate.getDate();
-    var pad = function(val) {
-      var str = val.toString();
-      return str.length < 2 ? "0" + str : str;
-    };
-    dateString = [y, pad(m), pad(d)].join("-");
 
     var dbdata = JSON.stringify({
       tagid: jsondata.tagid,
@@ -231,12 +227,27 @@ class Registration extends Component {
     });
   }
 
-  clear(){
-    console.log("Clear clicked")
+  tagidvalidation(value){
+    this.setState({
+      tagvalue: value
+    })
+
+    if(value.length===10){
+      this.setState({
+        fieldvalidation: false
+      })
+    }
+    else{
+      this.setState({
+        fieldvalidation: true
+      })
+    }
+
+    console.log(value)
   }
 
   render() {
-    const { res, invalid, displayErrors, } = this.state;
+    const { res, invalid, displayErrors,tagvalue, fieldvalidation } = this.state;
     const { classes } = this.props;
     return (
       <div>
@@ -254,18 +265,20 @@ class Registration extends Component {
             name="tagid"
             type="text"
             label="Tag ID"
+            value={tagvalue}
             margin="normal"
             variant="outlined"
             required
+            maxLength="2"
+            onChange={(e) =>{this.tagidvalidation(e.target.value) }}
             autoComplete="off"
-            
-
+            inputProps={{maxLength: 10}}
             InputLabelProps={{
               classes: {
                 root: classes.cssLabel,
                 focused: classes.cssFocused,
               },
-            }}
+            }}             // eslint-disable-next-line
             InputProps={{
               classes: {
                 root: classes.cssOutlinedInput,
@@ -273,7 +286,6 @@ class Registration extends Component {
                 notchedOutline: classes.notchedOutline,
                 input: classes.resize,                
               },
-              
             }}
           />
 
@@ -287,6 +299,7 @@ class Registration extends Component {
             label="Manufacturer"
             margin="normal"
             variant="outlined"
+            disabled={fieldvalidation}
             required
             autoComplete="off"
             InputLabelProps={{
@@ -314,6 +327,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -340,6 +354,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -366,6 +381,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -395,6 +411,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -422,6 +439,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -448,15 +466,17 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
-            autoComplete="off" // eslint-disable-next-line
-            onInput = {(e) =>{e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,4)}}
+            disabled={fieldvalidation}
+            autoComplete="off" 
+            // onInput = {(e) =>{e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,4)}}
             helperText="YYYY"
+            inputProps={{maxLength: 10}}
             InputLabelProps={{
               classes: {
                 root: classes.cssLabel,
                 focused: classes.cssFocused,
               },
-            }}
+            }} // eslint-disable-next-line
             InputProps={{
               classes: {
                 root: classes.cssOutlinedInput,
@@ -476,6 +496,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -504,6 +525,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -530,6 +552,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -556,6 +579,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -582,6 +606,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -609,6 +634,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -635,6 +661,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -661,6 +688,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -688,6 +716,7 @@ class Registration extends Component {
             margin="normal"
             variant="outlined"
             required
+            disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
               classes: {
@@ -710,6 +739,7 @@ class Registration extends Component {
           <Button
             variant="contained"
             color="primary"
+            disabled={fieldvalidation}
             className={classes.button}
             type="submit"
           >
