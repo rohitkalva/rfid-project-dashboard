@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-// import "./css/reg.css";
-// import "./css/bootstrap.min.css";
 import axios from "axios";
-import PropTypes from "prop-types"; // eslint-disable-next-line
-// import classNames from "classnames";
+import PropTypes from "prop-types"; 
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-// import Icon from "@material-ui/core/Icon";
 
 const styles = theme => ({
   container: {
@@ -90,12 +86,15 @@ class Registration extends Component {
     this.state = {
       res: "",
       tagvalue: "",
-      fieldvalidation: true
+      fieldvalidation: true,
+      lead_front:"0",
+      lead_back:"0"
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    // this.changerandom = this.changerandom.bind(this);
     this.timeoutfunction = this.timeoutfunction.bind(this);
     this.tagidvalidation = this.tagidvalidation.bind(this);
+    this.lead_front = this.lead_front.bind(this);
+    this.lead_back = this.lead_back.bind(this);
   }
 
   convert(str) {
@@ -174,13 +173,25 @@ class Registration extends Component {
     console.log(jsondata);
 
     var dbdata = JSON.stringify({
-      tagid: jsondata.tagid,
-      equipment: jsondata.equipment,
-      orderdate: jsondata.orderdate,
-      equipment_type: jsondata.equipment_type,
-      labelling: jsondata.labelling,
-      nextinspdate: jsondata.nextinspdate,
-      username: jsondata.username
+        manufacturer : jsondata.manufacturer,
+        model : jsondata.model, 
+        variant : jsondata.type,
+        serial_no : jsondata.serialnumber,
+        lead_front : jsondata.leadfront,
+        lead_back : jsondata.leadback,
+        year_of_mfg : jsondata.year,
+        colour : jsondata.colour,
+        size : jsondata.size,
+        length : jsondata.length,
+        tagid : jsondata.tagid,
+        label : jsondata.labeling,
+        localid : jsondata.identification,
+        clinic : jsondata.clinic,
+        building : jsondata.building,
+        department : jsondata.department,
+        location : jsondata.location,
+        nextinspdate : nextinspdate,
+        user_name : "kalva"
     });
     console.log(dbdata);
     // fetch('http://138.68.108.140:1080/registration', {
@@ -242,12 +253,23 @@ class Registration extends Component {
         fieldvalidation: true
       })
     }
-
-    console.log(value)
   }
 
+  lead_front(val){
+    this.setState({
+      lead_front: val
+    })
+  }
+
+  lead_back(val){
+    this.setState({
+      lead_back: val
+    })
+  }
+
+  
   render() {
-    const { res, invalid, displayErrors,tagvalue, fieldvalidation } = this.state;
+    const { res, invalid, displayErrors,tagvalue, fieldvalidation,lead_back, lead_front} = this.state;
     const { classes } = this.props;
     return (
       <div>
@@ -405,12 +427,13 @@ class Registration extends Component {
             className={classes.textField}
             id="leadfront"
             name="leadfront"
-            type="number"
-            step="any"
+            type="number"     
+            value={lead_front}   
             label="Lead Front"
             margin="normal"
             variant="outlined"
             required
+            onChange={(e) =>{this.lead_front(e.target.value) }}
             disabled={fieldvalidation}
             autoComplete="off"
             InputLabelProps={{
@@ -426,7 +449,8 @@ class Registration extends Component {
                 notchedOutline: classes.notchedOutline,
                 input: classes.resize
               },
-            }}
+            }}// eslint-disable-next-line 
+            inputProps={{step: 0.01}}
           />
 
           <TextField
@@ -434,10 +458,11 @@ class Registration extends Component {
             id="leadback"
             name="leadback"
             type="number"
-            step="any"
+            value={lead_back}
             label="Lead Back"
             margin="normal"
             variant="outlined"
+            onChange={(e) =>{this.lead_back(e.target.value) }}
             required
             disabled={fieldvalidation}
             autoComplete="off"
@@ -454,7 +479,8 @@ class Registration extends Component {
                 notchedOutline: classes.notchedOutline,
                 input: classes.resize
               },
-            }}
+            }}// eslint-disable-next-line 
+            inputProps={{step: 0.01}}
           />
 
           <TextField
@@ -470,7 +496,7 @@ class Registration extends Component {
             autoComplete="off" 
             // onInput = {(e) =>{e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,4)}}
             helperText="YYYY"
-            inputProps={{maxLength: 10}}
+            inputProps={{maxLength: 4}}
             InputLabelProps={{
               classes: {
                 root: classes.cssLabel,
