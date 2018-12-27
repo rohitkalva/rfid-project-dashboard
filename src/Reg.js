@@ -494,9 +494,9 @@ class Registration extends Component {
             required
             disabled={fieldvalidation}
             autoComplete="off" 
-            // onInput = {(e) =>{e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,4)}}
+            onInput = {(e) =>{e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,4)}}
             helperText="YYYY"
-            inputProps={{maxLength: 4}}
+            // inputProps={{maxLength: 4}}
             InputLabelProps={{
               classes: {
                 root: classes.cssLabel,
