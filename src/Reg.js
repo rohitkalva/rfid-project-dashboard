@@ -191,7 +191,7 @@ class Registration extends Component {
         department : jsondata.department,
         location : jsondata.location,
         nextinspdate : nextinspdate,
-        user_name : "kalva"
+        user_name : localStorage.getItem("username")
     });
     console.log(dbdata);
     // fetch('http://138.68.108.140:1080/registration', {
@@ -493,7 +493,7 @@ class Registration extends Component {
             variant="outlined"
             required
             disabled={fieldvalidation}
-            autoComplete="off" 
+            autoComplete="off"  // eslint-disable-next-line
             onInput = {(e) =>{e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,4)}}
             helperText="YYYY"
             // inputProps={{maxLength: 4}}
