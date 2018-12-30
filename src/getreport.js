@@ -1,7 +1,25 @@
 import React, { Component } from "react";
-// import "./css/reg.css";
-import ModernDatepicker from "react-modern-datepicker";
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Button from "@material-ui/core/Button";
+
 import axios from "axios";
+
+const styles = theme => ({
+  container: {
+    marginLeft: 30,
+    marginTop: 30
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  button: {
+    margin: theme.spacing.unit
+  },
+});
 
 class getreport extends Component {
   constructor(props) {
@@ -16,6 +34,28 @@ class getreport extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleChange1 = this.handleChange1.bind(this);
     this.downloadcsv = this.downloadcsv.bind(this);
+    this.currentdate = this.currentdate.bind(this);
+  }
+
+  componentDidMount(){
+    this.currentdate();
+  }
+
+  currentdate(){
+    var date = new Date();
+    var y = date.getFullYear(),
+      m = date.getMonth() + 1, // january is month 0 in javascript
+      d = date.getDate();
+    var pad = function(val) {
+      var str = val.toString();
+      return str.length < 2 ? "0" + str : str;
+    };
+    date = [pad(d), pad(m), y].join("-");
+
+    this.setState({      
+      startDate: date,
+      toDate: date
+    })
   }
 
   //Function to handle from date
@@ -111,39 +151,55 @@ class getreport extends Component {
 
   render() {
     const { startDate, toDate } = this.state;
+    const { classes } = this.props;
+
     return (
       <div>
-        <form id="myForm" onSubmit={this.handleSubmit} autoComplete="off"> 
-          <label htmlFor="fromdate">From Date:</label>
-          <ModernDatepicker
-            id="orderdate"
-            name="orderdate"
-            type="text"
-            date={startDate}
-            format={"YYYY-MM-DD"}
-            showBorder
-            onChange={date => this.handleChange(date)}
-            placeholder={"Select From Date"}
-            
-          />
-
-          <label htmlFor="todate">To Date:</label>
-          <ModernDatepicker
-            id="todate"
-            name="todate"
-            type="text"
-            date={toDate}
-            format={"YYYY-MM-DD"}
-            showBorder
-            onChange={date => this.handleChange1(date)}
-            placeholder={"Select To Date"}
-          />
-
-          <button>Download Report</button>
+        <form id="myForm" onSubmit={this.handleSubmit} className={classes.container} autoComplete="off"> 
+        <br/>
+      <TextField
+        id="fromdate"
+        label="From"
+        type="date"
+        value={startDate}
+        className={classes.textField}
+        onChange={(e) =>{this.handleChange(e.target.value) }}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+    
+      <TextField
+        id="todate"
+        label="From"
+        type="date"
+        value={toDate}
+        className={classes.textField}
+        onChange={(e) =>{this.handleChange1(e.target.value) }}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+   
+   <br/>
+   <br/>
+   <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            type="submit"
+          >
+            Download Report
+          </Button>
         </form>
       </div>
     );
   }
 }
 
-export default getreport;
+getreport.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+
+export default withStyles(styles) (getreport);
