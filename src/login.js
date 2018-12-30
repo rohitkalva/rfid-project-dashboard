@@ -12,8 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import axios from 'axios';
 import { BrowserRouter } from 'react-router-dom';
-import Components from './components';
-
+import Header from './Header'
 //Styling
 const styles = theme => ({
   main: {
@@ -154,7 +153,7 @@ class SignIn extends Component{
         if(isLoggedin === true){
             return(
                  <BrowserRouter>
-                 <Components />
+                 <Header />
                  </BrowserRouter> 
             )
         }

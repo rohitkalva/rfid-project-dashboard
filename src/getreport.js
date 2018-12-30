@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./css/reg.css";
+// import "./css/reg.css";
 import ModernDatepicker from "react-modern-datepicker";
 import axios from "axios";
 
