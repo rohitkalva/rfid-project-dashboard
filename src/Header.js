@@ -10,6 +10,7 @@ import Registration from './Reg'
 import UpdateOldData from './UpdateOldData'
 import getreport from './getreport';
 import Usermanagement from './usermanagement'
+import FileUploadCheck from './fileuploadcheck'
 
 // The Header creates links that can be used to navigate
 // between routes.
@@ -50,6 +51,7 @@ class Header extends Component{
                 <Tab label="Download Report" component={Link} to="/getreport" />
                 <Tab label="Update Old Data" component={Link} to="/UpdateOldData" />
                 <Tab label="User Management" component={Link} to="/usermanagement" />
+                <Tab label="Upload Check" component={Link} to="/uploadcheck" />
               </Tabs>
               </AppBar>
               <Switch>
@@ -58,6 +60,7 @@ class Header extends Component{
       <Route path='/getreport' component={getreport}/>
       <Route path='/UpdateOldData' component={UpdateOldData}/>
       <Route path='/usermanagement' component={Usermanagement}/>
+      <Route path='/uploadcheck' component={FileUploadCheck}/>
       </Switch>
             </Fragment>
           )}
