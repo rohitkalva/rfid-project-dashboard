@@ -40,7 +40,6 @@ const styles = theme => ({
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing.unit,
-    marginLeft: theme.spacing.unit * 4,
   },
   submit: {
     marginTop: theme.spacing.unit * 3,
@@ -49,7 +48,7 @@ const styles = theme => ({
 
 //Main function
 
-class SignIn extends Component{
+class Login extends Component{
 
     constructor() {
         super();
@@ -199,8 +198,8 @@ class SignIn extends Component{
   }
   
 
-SignIn.propTypes = {
+Login.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+export default withStyles(styles)(Login);

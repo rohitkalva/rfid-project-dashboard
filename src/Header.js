@@ -11,6 +11,8 @@ import UpdateOldData from './UpdateOldData'
 import getreport from './getreport';
 import Usermanagement from './usermanagement'
 import FileUploadCheck from './fileuploadcheck'
+import Logout from './logout'
+import Login from './login'
 
 // The Header creates links that can be used to navigate
 // between routes.
@@ -52,8 +54,10 @@ class Header extends Component{
                 <Tab label="Update Old Data" component={Link} to="/UpdateOldData" />
                 <Tab label="User Management" component={Link} to="/usermanagement" />
                 <Tab label="Upload Check" component={Link} to="/uploadcheck" />
+                <Tab label = "LogOut" component={Link} to="/logout"/>
               </Tabs>
               </AppBar>
+              
               <Switch>
       <Route exact path='/' component={Home}/>      
       <Route path='/Reg' component={Registration}/>
@@ -61,6 +65,8 @@ class Header extends Component{
       <Route path='/UpdateOldData' component={UpdateOldData}/>
       <Route path='/usermanagement' component={Usermanagement}/>
       <Route path='/uploadcheck' component={FileUploadCheck}/>
+      <Route path='/logout' component={Logout}/>
+      <Route path='/login' component={Login}/>
       </Switch>
             </Fragment>
           )}
