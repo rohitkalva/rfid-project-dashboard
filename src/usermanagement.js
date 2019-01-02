@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import axios from 'axios'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -20,7 +21,6 @@ const styles = theme => ({
     fontWeight: theme.typography.fontWeightRegular,
   },
   form: {
-    // width: '100%', // Fix IE 11 issue.
     fontSize: theme.typography.pxToRem(18),
     fontWeight: theme.typography.fontWeightRegular,
     marginTop: theme.spacing.unit,
@@ -33,94 +33,141 @@ const styles = theme => ({
 });
 
 class Usermanagement extends Component{
+constructor() {
+  super();
+  this.state = {
+    password: "",
+    email: "",
+    emailerror: false,
+    unameerror: false,
+    buttonstate: true,
+    uname: "",
+    message: ""
+  };
+  this.handleSubmit = this.handleSubmit.bind(this);
+  this.unamevalidation = this.unamevalidation.bind(this);
+  this.handlepassword = this.handlepassword.bind(this);
+  this.emailvalidation = this.emailvalidation.bind(this);
+}
 
-    constructor() {
-        super();
-        this.state = {
-          password:"",
-          email: "",
-          emailerror: false,
-          buttonstate: true,
-          uname:""
-        };
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.unamevalidation = this.unamevalidation.bind(this);
-        this.handlepassword = this.handlepassword.bind(this);
-        this.emailvalidation = this.emailvalidation.bind(this);
-      }
+handleSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
 
-    handleSubmit(e){
-        e.preventDefault();
-        const form = e.target;
-        const data = new FormData(form);
-
-        function stringifyFormData(fd) {
-            const data = {};
-            for (let key of fd.keys()) {
-              data[key] = fd.get(key);
-            }
-            return JSON.stringify(data, null, 2);
-          }
-          var jsondata = JSON.parse(stringifyFormData(data));
-          console.log(jsondata);
-
-          setTimeout(this.changerandom(e), 7000);
+  function stringifyFormData(fd) {
+    const data = {};
+    for (let key of fd.keys()) {
+      data[key] = fd.get(key);
     }
+    return JSON.stringify(data, null, 2);
+  }
+  var jsondata = JSON.parse(stringifyFormData(data));
+  const url = "http://localhost:1080/api/register"
+  var self = this
+  axios.post(url, {
+      name: jsondata.name,
+      username: jsondata.username,
+      email: jsondata.email,
+      password: jsondata.password
+    })
+    .then(function (response) {
+      const res = response.data.message
+      self.setState({
+        message: res
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 
-    unamevalidation(uname){
-        this.setState({
-            uname: uname
-        })
-    }
+  setTimeout(this.changerandom(e), 10000);
+}
 
-    handlepassword(password){
-        console.log(password)
-        this.setState({
-            password:password
-        })
-    }
+unamevalidation(uname) {
+  const username = uname
+  var whitespace = username.indexOf(' ') !== -1;
 
-    //Function to check email in proper structure
-    validEmail(email) {
-        // eslint-disable-next-line
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(email);
-    }
+  this.setState({
+    uname: username,
+    message: ""
+  })
 
-    emailvalidation(email){
+  const url = 'http://localhost:1080/api/unamecheck/' + username
 
-        this.setState({
-            email: email
-        })
-        var em = this.validEmail(email)
-        if(em !== true){
-            this.setState({
-                emailerror: true,
-                buttonstate:true
-            })
+  var self = this
+  if (whitespace === false) {
+    axios.get(url)
+      .then(function (response) {
+        if (response.data.result !== 0) {
+          self.setState({
+            unameerror: true,
+            message: "Username already exists"
+          })
+        } else {
+          self.setState({
+            unameerror: false
+          })
         }
-        else{
-            this.setState({
-                emailerror: false,
-                buttonstate: false
-            })
-        }
-    }
-
-    changerandom(e) {
-    e.target.reset();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  } else {
     this.setState({
-        password:"",
-        email:"",
-        uname:""
+      unameerror: true,
+      message: "Username should not contain spaces"
     })
   }
+}
+
+handlepassword(password) {
+  console.log(password)
+  this.setState({
+    password: password
+  })
+}
+
+//Function to check email in proper structure
+validEmail(email) {
+  // eslint-disable-next-line
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+emailvalidation(email) {
+
+  this.setState({
+    email: email
+  })
+  var em = this.validEmail(email)
+  if (em !== true) {
+    this.setState({
+      emailerror: true,
+      buttonstate: true
+    })
+  } else {
+    this.setState({
+      emailerror: false,
+      buttonstate: false
+    })
+  }
+}
+
+changerandom(e) {
+  e.target.reset();
+  this.setState({
+    password: "",
+    email: "",
+    uname: ""
+  })
+}
 
     
    
     render(){
         const { classes } = this.props;
-        const {password, email, emailerror, buttonstate, uname} = this.state
+        const {password, email, emailerror, buttonstate, uname, unameerror, message} = this.state
       return(
         <div className={classes.root}>
           <ExpansionPanel>
@@ -129,8 +176,8 @@ class Usermanagement extends Component{
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
             <form className={classes.form}  id="myForm" onSubmit={this.handleSubmit} autoComplete="off"  noValidate>
-            {/* {login_error_text} */}
-            <FormControl margin="normal" required fullWidth>
+            {message}
+            <FormControl margin="normal" required fullWidth>            
               <InputLabel htmlFor="name">Name</InputLabel>
               <Input id="name" name="name" autoComplete="name" autoFocus/>
             </FormControl>
@@ -140,9 +187,10 @@ class Usermanagement extends Component{
               id="username" 
               name="username" 
               autoComplete="username" 
+              error={unameerror}
               autoFocus 
               value={uname}
-              onChange={(e) =>{this.unamevalidation(e.target.value) }}
+              onChange={(e) =>{this.unamevalidation(e.target.value) }}              
               />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
