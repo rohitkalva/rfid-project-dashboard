@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from "@material-ui/core/Button";
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import axios from "axios";
 
@@ -16,8 +21,21 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 200,
   },
+  root: {
+    width: '100%',
+  },
   button: {
     margin: theme.spacing.unit
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(22),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+  form: {
+    fontSize: theme.typography.pxToRem(18),
+    fontWeight: theme.typography.fontWeightRegular,
+    marginTop: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 4,
   },
 });
 
@@ -28,13 +46,17 @@ class getreport extends Component {
       res: "",
       startDate:"",
       toDate: "",
-      report: ""
+      report: "",
+      date:"",
+      errormsg: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleChange1 = this.handleChange1.bind(this);
     this.downloadcsv = this.downloadcsv.bind(this);
     this.currentdate = this.currentdate.bind(this);
+    this.date = this.date.bind(this);
+    this.handleSubmitDate = this.handleSubmitDate.bind(this);
   }
 
   componentDidMount(){
@@ -88,6 +110,40 @@ class getreport extends Component {
         console.log(this.state.report);
         this.downloadcsv(this.state.report);
       })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  //Function to setstate
+  date(date){
+    this.setState({
+      date: date
+    })
+  }
+
+  //Function to handle OnSubmit for date report
+  handleSubmitDate(event) {
+    event.preventDefault();
+
+    //Axios get call to send and retreive data from API
+    const {date} = this.state
+    const url = "http://localhost:1080/api/getdayreport/"+date
+    axios.get(url)
+      .then(response => {
+        if(response.data.report === "No inspections found for given date"){
+          this.setState({
+            errormsg: response.data.report
+          })
+        }
+        else{
+        this.setState({
+          report: response.data.report
+        });
+
+        console.log(this.state.report);
+        this.downloadcsv(this.state.report);
+      }})
       .catch(error => {
         console.error(error);
       });
@@ -150,13 +206,17 @@ class getreport extends Component {
 
 
   render() {
-    const { startDate, toDate } = this.state;
+    const { startDate, toDate, date, errormsg } = this.state;
     const { classes } = this.props;
 
     return (
-      <div>
+      <div className={classes.root}>
+        <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.heading}>Report for Date Range</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
         <form id="myForm" onSubmit={this.handleSubmit} className={classes.container} autoComplete="off"> 
-        <br/>
       <TextField
         id="fromdate"
         label="From"
@@ -181,9 +241,7 @@ class getreport extends Component {
         }}
       />
    
-   <br/>
-   <br/>
-   <Button
+        <Button
             variant="contained"
             color="primary"
             className={classes.button}
@@ -192,6 +250,42 @@ class getreport extends Component {
             Download Report
           </Button>
         </form>
+        </ExpansionPanelDetails>
+          </ExpansionPanel>
+
+          <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.heading}>Report for Given Date</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+        <form id="myForm" onSubmit={this.handleSubmitDate} className={classes.form} autoComplete="off"> 
+        {errormsg}
+        <br/>
+       <TextField
+        id="date"
+        label="Date"
+        type="date"
+        value={date}
+        className={classes.textField}
+        onChange={(e) =>{this.date(e.target.value) }}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+    
+        <br/>
+        <br/>
+        <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            type="submit"
+          >
+            Download Report
+          </Button>
+        </form>
+        </ExpansionPanelDetails>
+          </ExpansionPanel>
       </div>
     );
   }
