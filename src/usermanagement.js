@@ -42,12 +42,20 @@ constructor() {
     unameerror: false,
     buttonstate: true,
     uname: "",
-    message: ""
+    message: "",
+    p_newpassword:"",
+    p_password:"",
+    p_username: localStorage.getItem("username"),
+    p_message:""
   };
   this.handleSubmit = this.handleSubmit.bind(this);
   this.unamevalidation = this.unamevalidation.bind(this);
   this.handlepassword = this.handlepassword.bind(this);
   this.emailvalidation = this.emailvalidation.bind(this);
+  this.p_username = this.p_username.bind(this);
+  this.p_password = this.p_password.bind(this);
+  this.p_newpassword = this.p_newpassword.bind(this);
+  this.handleSubmitchangeuserpass = this.handleSubmitchangeuserpass.bind(this);
 }
 
 handleSubmit(e) {
@@ -154,12 +162,67 @@ emailvalidation(email) {
   }
 }
 
+handleSubmitchangeuserpass(e){
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+
+  function stringifyFormData(fd) {
+    const data = {};
+    for (let key of fd.keys()) {
+      data[key] = fd.get(key);
+    }
+    return JSON.stringify(data, null, 2);
+  }
+  var jsondata = JSON.parse(stringifyFormData(data));
+  const url = "http://localhost:1080/api/user/changepassword"
+  var self = this
+
+  axios.post(url, {
+    username: jsondata.username,
+    password: jsondata.password,
+    newpassword: jsondata.newpassword   
+  })
+  .then(function (response) {
+    const res = response.data.message
+    self.setState({
+      p_message: res
+    })
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+setTimeout(this.changerandom(e), 10000);
+
+}
+
+p_password(p_password){
+  this.setState({
+    p_password: p_password
+  })
+}
+
+p_newpassword(p_newpassword){
+  this.setState({
+    p_newpassword: p_newpassword
+  })
+}
+
+p_username(p_username){
+  this.setState({
+    p_username: p_username
+  })
+}
+
 changerandom(e) {
   e.target.reset();
   this.setState({
     password: "",
     email: "",
-    uname: ""
+    uname: "",
+    p_password:"",
+    p_newpassword:""
   })
 }
 
@@ -167,7 +230,7 @@ changerandom(e) {
    
     render(){
         const { classes } = this.props;
-        const {password, email, emailerror, buttonstate, uname, unameerror, message} = this.state
+        const {password, email, emailerror, buttonstate, uname, unameerror, message,p_username, p_password, p_newpassword, p_message} = this.state
       return(
         <div className={classes.root}>
           <ExpansionPanel>
@@ -235,20 +298,60 @@ changerandom(e) {
           </ExpansionPanel>
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>Expansion Panel 2</Typography>
+              <Typography className={classes.heading}>Change/Update user password</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                sit amet blandit leo lobortis eget.
-              </Typography>
+            <form className={classes.form}  id="myForm" onSubmit={this.handleSubmitchangeuserpass} autoComplete="off"  noValidate>
+            {p_message}
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="username">User Name</InputLabel>
+              <Input 
+              id="username" 
+              name="username" 
+              autoComplete="username" 
+              autoFocus 
+              value={p_username}
+              onChange={(e) =>{ this.p_username(e.target.value)}}              
+              />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password">Old Password</InputLabel>
+              <Input 
+              name="password" 
+              type="password" 
+              id="password" 
+              autoComplete="current-password"
+              value={p_password}
+              onChange={(e) =>{this.p_password(e.target.value)}}
+              />
+            </FormControl>
+
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password">New Password</InputLabel>
+              <Input 
+              name="newpassword" 
+              type="password" 
+              id="newpassword" 
+              autoComplete="current-password"
+              value={p_newpassword}
+              onChange={(e) =>{this.p_newpassword(e.target.value)}}
+              />
+            </FormControl>
+
+            <Button
+              type="submit"
+              id="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Submit
+            </Button>
+          </form>
             </ExpansionPanelDetails>
           </ExpansionPanel>
-          <ExpansionPanel disabled>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>Disabled Expansion Panel</Typography>
-            </ExpansionPanelSummary>
-          </ExpansionPanel>
+          
         </div>
       );
     }
