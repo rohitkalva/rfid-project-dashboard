@@ -43,10 +43,10 @@ constructor() {
     buttonstate: true,
     uname: "",
     message: "",
-    p_newpassword:"",
-    p_password:"",
+    p_newpassword: "",
+    p_password: "",
     p_username: localStorage.getItem("username"),
-    p_message:""
+    p_message: ""
   };
   this.handleSubmit = this.handleSubmit.bind(this);
   this.unamevalidation = this.unamevalidation.bind(this);
@@ -58,6 +58,7 @@ constructor() {
   this.handleSubmitchangeuserpass = this.handleSubmitchangeuserpass.bind(this);
 }
 
+//OnSubmit function to handle user registration
 handleSubmit(e) {
   e.preventDefault();
   const form = e.target;
@@ -92,6 +93,7 @@ handleSubmit(e) {
   setTimeout(this.changerandom(e), 10000);
 }
 
+//Function to check/validate if the selected username exists in the DB or not.
 unamevalidation(uname) {
   const username = uname
   var whitespace = username.indexOf(' ') !== -1;
@@ -129,6 +131,7 @@ unamevalidation(uname) {
   }
 }
 
+//Function to set state for password during user creation
 handlepassword(password) {
   console.log(password)
   this.setState({
@@ -143,6 +146,7 @@ validEmail(email) {
   return re.test(email);
 }
 
+//Function to validate correctness of given eemail
 emailvalidation(email) {
 
   this.setState({
@@ -162,7 +166,8 @@ emailvalidation(email) {
   }
 }
 
-handleSubmitchangeuserpass(e){
+//OnSubmit function to handle password change
+handleSubmitchangeuserpass(e) {
   e.preventDefault();
   const form = e.target;
   const data = new FormData(form);
@@ -179,37 +184,40 @@ handleSubmitchangeuserpass(e){
   var self = this
 
   axios.post(url, {
-    username: jsondata.username,
-    password: jsondata.password,
-    newpassword: jsondata.newpassword   
-  })
-  .then(function (response) {
-    const res = response.data.message
-    self.setState({
-      p_message: res
+      username: jsondata.username,
+      password: jsondata.password,
+      newpassword: jsondata.newpassword
     })
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+    .then(function (response) {
+      const res = response.data.message
+      self.setState({
+        p_message: res
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 
-setTimeout(this.changerandom(e), 10000);
+  setTimeout(this.changerandom(e), 10000);
 
 }
 
-p_password(p_password){
+//Function to setstate for password input field during password change.
+p_password(p_password) {
   this.setState({
     p_password: p_password
   })
 }
 
-p_newpassword(p_newpassword){
+//Function to setstate for newpassword input field during password change.
+p_newpassword(p_newpassword) {
   this.setState({
     p_newpassword: p_newpassword
   })
 }
 
-p_username(p_username){
+//Function to setstate for username input field during password change.
+p_username(p_username) {
   this.setState({
     p_username: p_username
   })
@@ -221,12 +229,10 @@ changerandom(e) {
     password: "",
     email: "",
     uname: "",
-    p_password:"",
-    p_newpassword:""
+    p_password: "",
+    p_newpassword: ""
   })
 }
-
-    
    
     render(){
         const { classes } = this.props;
@@ -296,6 +302,8 @@ changerandom(e) {
           </form>
             </ExpansionPanelDetails>
           </ExpansionPanel>
+
+
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography className={classes.heading}>Change/Update user password</Typography>
