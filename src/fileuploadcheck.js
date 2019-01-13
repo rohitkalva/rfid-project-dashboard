@@ -24,17 +24,17 @@ class FileUploadCheck extends Component{
         e.preventDefault();
         const {file} = this.state
         const data = new FormData();
-        data.append('1', file);
+        data.append('111133B2DDD9014000000000', file);
 
         axios({
             method: 'post',
-            url: 'http://localhost:1080/app/imageupload/1',
+            url: 'http://localhost:1080/app/imageupload/111133B2DDD9014000000000',
             data: data,
             config: { headers: {'Content-Type': 'multipart/form-data' }}
             })
             .then(function (response) {
                 //handle success
-                console.log(response);
+                console.log(response.data.message);
             })
             .catch(function (response) {
                 //handle error

@@ -72,11 +72,12 @@ class getreport extends Component {
       var str = val.toString();
       return str.length < 2 ? "0" + str : str;
     };
-    date = [pad(d), pad(m), y].join("-");
+    date = [y, pad(m), pad(d)].join("-");
 
     this.setState({      
       startDate: date,
-      toDate: date
+      toDate: date,
+      date: date
     })
   }
 
