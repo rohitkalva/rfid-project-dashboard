@@ -74,6 +74,19 @@ class getreport extends Component {
     };
     date = [y, pad(m), pad(d)].join("-");
 
+    function getDateDiffInYears(date1, date2) {
+      var dateParts1 = date1.split('-')
+        , dateParts2 = date2.split('-')
+        , d1 = new Date(dateParts1[0], dateParts1[1]-1, dateParts1[2])
+        , d2 = new Date(dateParts2[0], dateParts2[1]-1, dateParts2[2])
+    
+      return new Date(d1 - d2).getYear() - new Date(0).getYear() + 1;
+    }
+    
+    var diff = getDateDiffInYears(date, '2012-07-03');
+    
+    console.log(diff); // => 7 years
+
     this.setState({      
       startDate: date,
       toDate: date,
