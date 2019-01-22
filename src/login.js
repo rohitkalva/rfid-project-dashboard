@@ -108,7 +108,7 @@ class Login extends Component{
           //Axios Post call for validating username and password
           axios({
               method: "post",
-              url: "http://http://141.44.18.16:1080/api/authenticate",
+              url: "http://141.44.18.16:1080/api/authenticate",
               data: jsondata
           }) 
           .then(function(response) {
