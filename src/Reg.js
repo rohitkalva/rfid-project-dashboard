@@ -201,8 +201,8 @@ class Registration extends Component {
     var self = this;
     axios({
       method: "post",
-      // url: "http://141.44.18.16:1080/api/registration",
-      url: 'http://localhost:1080/api/registration',
+      url: "http://141.44.18.16:1080/api/registration",
+      // url: 'http://localhost:1080/api/registration',
       data: JSON.parse(dbdata)
     })
       .then(function(response) {
