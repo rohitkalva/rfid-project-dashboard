@@ -5,7 +5,9 @@ import React from 'react'
 const Home = () => (
   <div>
   
-  <img id ="image" src="https://i.imgur.com/IVdQfBI.png" alt="logo"/>
+  {/* <img id ="image" src="https://i.imgur.com/IVdQfBI.png" alt="logo"/>*/}
+
+
   </div>
 )
 

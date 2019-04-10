@@ -113,7 +113,7 @@ class getreport extends Component {
     event.preventDefault();
 
     //Axios post call to send and retreive data from API
-    axios.post("http://localhost:1080/api/getreport", {
+    axios.post("http://141.44.18.16:1080/api/getreport", {
         fromdate: this.state.startDate + " 00:00:00",
         todate: this.state.toDate + " 23:59:59"
       })
@@ -142,7 +142,7 @@ class getreport extends Component {
 
     //Axios get call to send and retreive data from API
     const {date} = this.state
-    const url = "http://localhost:1080/api/getdayreport/"+date
+    const url = "http://141.44.18.16:1080/api/getdayreport/"+date
     axios.get(url)
       .then(response => {
         if(response.data.report === "No inspections found for given date"){

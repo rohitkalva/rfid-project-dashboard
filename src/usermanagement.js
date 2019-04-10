@@ -72,7 +72,7 @@ handleSubmit(e) {
     return JSON.stringify(data, null, 2);
   }
   var jsondata = JSON.parse(stringifyFormData(data));
-  const url = "http://localhost:1080/api/register"
+  const url = "http://141.44.18.16:1080/api/register"
   var self = this
   axios.post(url, {
       name: jsondata.name,
@@ -103,7 +103,7 @@ unamevalidation(uname) {
     message: ""
   })
 
-  const url = 'http://localhost:1080/api/unamecheck/' + username
+  const url = 'http://141.44.18.16:1080/api/unamecheck/' + username
 
   var self = this
   if (whitespace === false) {
@@ -180,7 +180,7 @@ handleSubmitchangeuserpass(e) {
     return JSON.stringify(data, null, 2);
   }
   var jsondata = JSON.parse(stringifyFormData(data));
-  const url = "http://localhost:1080/api/user/changepassword"
+  const url = "http://141.44.18.16:1080/api/user/changepassword"
   var self = this
 
   axios.post(url, {

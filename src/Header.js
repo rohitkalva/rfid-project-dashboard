@@ -51,9 +51,9 @@ class Header extends Component{
                 <Tab label="Home" component={Link} to="/" />
                 <Tab label="New Product Registration" component={Link} to="/Reg" />
                 <Tab label="Download Report" component={Link} to="/getreport" />
-                <Tab label="Update Old Data" component={Link} to="/UpdateOldData" />
+                {/* <Tab label="Update Old Data" component={Link} to="/UpdateOldData" /> */}
                 <Tab label="User Management" component={Link} to="/usermanagement" />
-                <Tab label="Upload Check" component={Link} to="/uploadcheck" />
+                {/* <Tab label="Upload Check" component={Link} to="/uploadcheck" /> */}
                 <Tab label = "LogOut" component={Link} to="/logout"/>
               </Tabs>
               </AppBar>
