@@ -53,8 +53,10 @@ class Header extends Component{
                 <Tab label="Download Report" component={Link} to="/getreport" />
                 {/* <Tab label="Update Old Data" component={Link} to="/UpdateOldData" /> */}
                 <Tab label="User Management" component={Link} to="/usermanagement" />
+                <Tab label ="File Browser" component={Link} to="/file-browser" />
                 {/* <Tab label="Upload Check" component={Link} to="/uploadcheck" /> */}
                 <Tab label = "LogOut" component={Link} to="/logout"/>
+                
               </Tabs>
               </AppBar>
               
@@ -65,6 +67,8 @@ class Header extends Component{
       <Route path='/UpdateOldData' component={UpdateOldData}/>
       <Route path='/usermanagement' component={Usermanagement}/>
       <Route path='/uploadcheck' component={FileUploadCheck}/>
+      <Route path='/file-browser' component={() => { window.location = 'http://141.44.18.16:1080/file-browser'; return null;} }/>
+
       <Route path='/logout' component={Logout}/>
       <Route path='/login' component={Login}/>
       </Switch>
